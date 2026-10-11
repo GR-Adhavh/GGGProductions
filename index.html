@@ -1,0 +1,1325 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101010">
+<title>G³ Productions</title>
+
+<style>
+:root {
+  --bg: #101010;
+  --panel: #191919;
+  --accent: #f5b942;
+  --accent2: #ff6b35;
+  --text: #f7f4ed;
+  --muted: #aaa49a;
+  --line: rgba(245,185,66,.28);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  overflow-x: hidden;
+  position: relative;
+  padding-bottom: 175px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("logo1.png") center / cover no-repeat;
+  opacity: .07;
+  pointer-events: none;
+  z-index: -2;
+}
+
+#bass-bg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 80vmin;
+  height: 80vmin;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--song-color, #f5b942) 0%, transparent 70%);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.pulsing #bass-bg {
+  animation: heartbeat .6s cubic-bezier(.1,.7,1,.1) infinite;
+}
+
+@keyframes heartbeat {
+  0% { transform: translate(-50%,-50%) scale(.8); opacity: .10; }
+  10% { transform: translate(-50%,-50%) scale(1.5); opacity: .48; }
+  100% { transform: translate(-50%,-50%) scale(1.6); opacity: 0; }
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px clamp(16px, 4vw, 42px);
+  background: rgba(16,16,16,.9);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+header img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 32px);
+  letter-spacing: .5px;
+  font-weight: 850;
+}
+
+#brandTitle {
+  color: var(--accent);
+  transition: opacity .35s ease, transform .35s ease;
+  display: inline-block;
+}
+
+main {
+  width: min(900px, 92%);
+  margin: 0 auto;
+  padding: 22px 0 55px;
+  position: relative;
+  z-index: 1;
+}
+
+#countdown-container {
+  text-align: center;
+  padding: 24px 16px;
+  margin: 0 auto 26px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(245,185,66,.10), rgba(255,107,53,.04));
+  box-shadow: 0 14px 45px rgba(0,0,0,.22);
+}
+
+.countdown-title {
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: 4px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+#countdown {
+  font: 800 clamp(28px, 7vw, 48px)/1.1 "Courier New", monospace;
+  letter-spacing: 1px;
+}
+
+.label-container {
+  display: flex;
+  max-width: 400px;
+  margin: 12px auto 0;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.label-container span { flex: 1; }
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 28px 2px 14px;
+}
+
+.section-heading h2 {
+  font-size: 17px;
+  margin: 0;
+}
+
+.section-heading span {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.song-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 13px;
+  margin: 11px 0;
+  background: linear-gradient(120deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 17px;
+  transition: transform .2s, border-color .2s, background .2s;
+  cursor: pointer;
+}
+
+.song-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: rgba(245,185,66,.06);
+}
+
+.cover {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #29231a;
+  flex-shrink: 0;
+}
+
+.song-meta { min-width: 0; flex: 1; }
+
+.song-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.composer {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.composer span { color: #c084fc; font-weight: 700; }
+
+.play-mark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+  color: #16120a;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.soon .play-mark {
+  background: #30291e;
+  color: var(--accent);
+  border: 1px solid var(--line);
+}
+
+.pill {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  border: 1px solid var(--line);
+  padding: 4px 7px;
+  border-radius: 20px;
+}
+
+/* Top 3 Trending Podium */
+#trendingSection {
+  margin: 40px 0 10px;
+  padding: 22px 18px 25px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(245,185,66,.13), transparent 65%),
+    linear-gradient(145deg, rgba(245,185,66,.045), rgba(255,107,53,.025));
+  overflow: hidden;
+}
+
+.trending-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.trending-heading h2 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+.trending-heading > span {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+
+.trending-subtitle {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 8px 0 26px;
+}
+
+.trending-podium {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  align-items: end;
+  gap: 12px;
+}
+
+.trending-card {
+  min-width: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 13px 9px 16px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 17px;
+  background: rgba(255,255,255,.035);
+  transition: transform .2s, border-color .2s, background .2s;
+  animation: podiumAppear .5s ease both;
+}
+
+.trending-card:nth-child(1) { animation-delay: .1s; }
+.trending-card:nth-child(2) { animation-delay: .2s; }
+.trending-card:nth-child(3) { animation-delay: .3s; }
+
+.trending-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  background: rgba(245,185,66,.07);
+}
+
+.trending-card.rank-1 {
+  padding-top: 19px;
+  padding-bottom: 22px;
+  border-color: rgba(245,185,66,.55);
+  background: linear-gradient(180deg, rgba(245,185,66,.13), rgba(255,255,255,.025));
+  box-shadow: 0 0 30px rgba(245,185,66,.07);
+}
+
+.trending-medal {
+  font-size: 25px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.rank-1 .trending-medal { font-size: 34px; }
+
+.trending-cover {
+  display: block;
+  width: 100%;
+  max-width: 115px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #29231a;
+  margin-bottom: 12px;
+  box-shadow: 0 5px 16px rgba(0,0,0,.3);
+}
+
+.rank-1 .trending-cover {
+  max-width: 145px;
+  border: 2px solid rgba(245,185,66,.65);
+  box-shadow: 0 0 22px rgba(245,185,66,.12);
+}
+
+.trending-rank-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.trending-name {
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.rank-1 .trending-name { font-size: 14px; }
+
+.trending-artist {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.trending-views {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 900;
+  margin-top: 13px;
+}
+
+.trending-views small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 500;
+  margin-top: 3px;
+}
+
+.trending-status {
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 20px;
+}
+
+@keyframes podiumAppear {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+footer {
+  text-align: center;
+  padding: 18px;
+  color: #777168;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+#modalBackdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  padding: 20px;
+  background: rgba(0,0,0,.75);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+}
+
+#modalBackdrop.show { display: flex; }
+
+.modal {
+  width: min(390px,100%);
+  padding: 28px 24px;
+  text-align: center;
+  background: #1b1915;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: 0 20px 70px #000;
+  animation: pop .2s ease-out;
+}
+
+.modal-symbol { font-size: 35px; margin-bottom: 12px; }
+
+.modal h2 {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 22px;
+}
+
+.modal p {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.modal button {
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 25px;
+  background: var(--accent);
+  color: #16120a;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@keyframes pop {
+  from { transform: scale(.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#trackPopup {
+  display: none;
+  position: fixed;
+  right: 18px;
+  bottom: 180px;
+  width: 230px;
+  padding: 14px;
+  z-index: 15;
+  background: rgba(20,16,10,.94);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  box-shadow: 0 10px 35px rgba(0,0,0,.65);
+  backdrop-filter: blur(12px);
+  animation: slideUp .3s ease-out;
+}
+
+#trackPopup.show { display: block; }
+
+#trackPopup img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#popupSongName {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  margin: 8px 0;
+}
+
+#popupSongName span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scrollText 8s linear infinite;
+}
+
+@keyframes scrollText {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+#closeTrackPopup {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.soundwave {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  height: 16px;
+  align-items: flex-end;
+}
+
+.soundwave div {
+  width: 3px;
+  height: 4px;
+  background: var(--song-color,var(--accent));
+  animation: wave .8s infinite ease-in-out;
+}
+
+.soundwave div:nth-child(2) { animation-delay: .1s; }
+.soundwave div:nth-child(3) { animation-delay: .2s; }
+.soundwave div:nth-child(4) { animation-delay: .3s; }
+.soundwave div:nth-child(5) { animation-delay: .4s; }
+
+.soundwave.paused div {
+  animation-play-state: paused;
+  height: 3px;
+}
+
+@keyframes wave {
+  0%,100% { height: 3px; }
+  50% { height: 15px; }
+}
+
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 12;
+  padding: 12px 12px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(16,12,8,.95);
+  backdrop-filter: blur(14px);
+  border-top: 2px solid var(--song-color,var(--accent));
+  box-shadow: 0 -10px 30px rgba(0,0,0,.55);
+}
+
+.controls-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin: 2px 0 10px;
+}
+
+button.control {
+  width: 45px;
+  height: 45px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #16120a;
+  font-size: 18px;
+  font-weight: 800;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  box-shadow: 0 4px 15px rgba(245,185,66,.25);
+}
+
+button.control.main-control {
+  width: 52px;
+  height: 52px;
+  font-size: 20px;
+}
+
+.seek-container {
+  width: min(650px,90%);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.seek-container input {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--song-color,var(--accent));
+  cursor: pointer;
+}
+
+#playerSongTitle {
+  width: min(650px,90%);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text);
+  margin: 0 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#surpriseButton {
+  position: fixed;
+  right: 14px;
+  bottom: 155px;
+  z-index: 18;
+  width: 112px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  border: none;
+  background: transparent;
+  color: #e0e8d2;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#surpriseButton .surprise-icon {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #89916a;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 25% 25%, #6c7650 0 16%, transparent 18%),
+    radial-gradient(ellipse at 75% 70%, #252f24 0 20%, transparent 22%),
+    radial-gradient(ellipse at 65% 20%, #4a583b 0 18%, transparent 20%),
+    radial-gradient(ellipse at 20% 80%, #505b3c 0 17%, transparent 19%),
+    #343f2d;
+  font-size: 28px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.5), 0 0 12px rgba(110,130,75,.22);
+  transition: transform .2s, filter .2s;
+}
+
+#surpriseButton .surprise-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-shadow: 0 2px 5px #000;
+}
+
+#surpriseButton:hover .surprise-icon {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+#surpriseButton:active .surprise-icon { transform: scale(.95); }
+
+#surpriseOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+#surpriseOverlay.show { display: flex; }
+
+#surpriseVideo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  max-height: 100dvh;
+  object-fit: contain;
+  background: #000;
+  outline: none;
+  border: none;
+  border-radius: 0;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(18px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width:480px) {
+  #trackPopup {
+    right: 10px;
+    bottom: 165px;
+    width: 190px;
+  }
+
+  .controls-row { gap: 20px; }
+
+  header img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .cover {
+    width: 66px;
+    height: 66px;
+  }
+
+  .song-title { font-size: 14px; }
+
+  .song-card {
+    gap: 11px;
+    padding: 10px;
+  }
+
+  .play-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .composer { font-size: 11px; }
+
+  #surpriseButton {
+    right: 7px;
+    bottom: 150px;
+    width: 108px;
+  }
+
+  #surpriseButton .surprise-icon {
+    width: 54px;
+    height: 54px;
+    font-size: 25px;
+  }
+
+  #surpriseButton .surprise-label { font-size: 9px; }
+
+  #trendingSection { padding: 15px 11px 20px; }
+
+  .trending-heading h2 { font-size: 17px; }
+
+  .trending-heading > span { font-size: 8px; }
+
+  .trending-podium { gap: 7px; }
+
+  .trending-card {
+    padding: 10px 5px 13px;
+    border-radius: 13px;
+  }
+
+  .trending-card.rank-1 {
+    padding-top: 14px;
+    padding-bottom: 17px;
+  }
+
+  .trending-medal { font-size: 21px; }
+
+  .rank-1 .trending-medal { font-size: 28px; }
+
+  .trending-cover {
+    border-radius: 9px;
+    margin-bottom: 9px;
+  }
+
+  .trending-name { font-size: 10px; }
+
+  .rank-1 .trending-name { font-size: 11px; }
+
+  .trending-artist { font-size: 9px; }
+
+  .trending-views { font-size: 11px; }
+}
+
+@media (max-width:350px) {
+  .trending-podium { gap: 5px; }
+  .trending-card { padding-left: 3px; padding-right: 3px; }
+  .trending-rank-label { font-size: 8px; letter-spacing: 1px; }
+}
+</style>
+</head>
+
+<body>
+<div id="bass-bg" aria-hidden="true"></div>
+
+<header>
+  <img src="logo.png" alt="G3 Productions logo"
+       onerror="this.style.visibility='hidden'">
+  <div>
+    <h1 id="brandTitle">G³ Productions</h1>
+  </div>
+</header>
+
+<main>
+  <section id="countdown-container" aria-label="Hitman arrival countdown">
+    <div class="countdown-title">Hitman Arrives In</div>
+    <div id="countdown">Loading...</div>
+    <div class="label-container">
+      <span>Days</span>
+      <span>Hours</span>
+      <span>Minutes</span>
+      <span>Seconds</span>
+    </div>
+  </section>
+
+  <div class="section-heading">
+    <h2>Featured Tracks</h2>
+    <span>G^3 AUDIO COLLECTION</span>
+  </div>
+
+  <div class="song-card" data-song="Ra-Gay">
+    <img class="cover" src="Ragay.png" alt="Ra-Gay cover">
+    <div class="song-meta">
+      <div class="song-title">Ra-Gay</div>
+      <div class="composer">Composed by: <span>Goutham P, G R Adhavh</span></div>
+    </div>
+    <div class="play-mark">▶</div>
+  </div>
+
+  <div class="song-card" data-song="Ra-Gay Ultraphonk">
+    <img class="cover" src="rgultra.png" alt="Ra-Gay Ultraphonk cover">
+    <div class="song-meta">
+      <div class="song-title">Ra-Gay Ultraphonk</div>
+      <div class="composer">Composed by: <span>G R Adhavh</span></div>
+    </div>
+    <div class="play-mark">▶</div>
+  </div>
+
+  <div class="song-card" data-song="Naughty Niranjan">
+    <img class="cover" src="nn.png" alt="Naughty Niranjan cover">
+    <div class="song-meta">
+      <div class="song-title">Naughty Niranjan</div>
+      <div class="composer">Composed by: <span>Rakesh V, Goutham P, G R Adhavh</span></div>
+    </div>
+    <div class="play-mark">▶</div>
+  </div>
+
+  <div class="song-card" data-song="Lavender Poove">
+    <img class="cover" src="lp.png" alt="Lavender Poove cover">
+    <div class="song-meta">
+      <div class="song-title">Lavender Poove</div>
+      <div class="composer">Composed by: <span>G R Adhavh</span></div>
+    </div>
+    <div class="play-mark">▶</div>
+  </div>
+
+  <div class="song-card" data-song="Happy Birthday Megharajan">
+    <img class="cover" src="hbdmeg.png" alt="Happy Birthday Megharajan cover">
+    <div class="song-meta">
+      <div class="song-title">Happy Birthday Megharajan</div>
+      <div class="composer">Composed by: <span>G R Adhavh</span></div>
+    </div>
+    <div class="play-mark">▶</div>
+  </div>
+
+  <div class="song-card soon" data-song="Hitman Of Girls">
+    <img class="cover" src="hmog.png" alt="Hitman Of Girls cover">
+    <div class="song-meta">
+      <div class="song-title">Hitman Of Girls</div>
+      <div class="composer">Composed by: <span>GGG Productions Combined</span></div>
+      <span class="pill">COMING SOON</span>
+    </div>
+    <div class="play-mark">✦</div>
+  </div>
+
+  <section id="trendingSection">
+    <div class="trending-heading">
+      <h2>🔥 Trending Songs</h2>
+      <span>TOP 3 TRACKS</span>
+    </div>
+    <div class="trending-subtitle">The most-played tracks across visitors</div>
+    <div id="trendingStatus" class="trending-status">Connecting to Firebase...</div>
+    <div class="trending-podium" id="trendingList"></div>
+  </section>
+</main>
+
+<footer>GAWK GAWK GOUTHAM PRODUCTIONS · SOUND IN PROGRESS</footer>
+
+<div id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <button id="closeModal" aria-label="Close popup"
+      style="float:right;margin-top:-12px;margin-right:-10px;padding:4px 10px;background:transparent;color:var(--text);font-size:24px;">×</button>
+    <div class="modal-symbol">✦</div>
+    <h2 id="modalTitle">Coming soon</h2>
+    <p id="modalMessage">Hitman Of Girls is on its way. Stay tuned for the arrival.</p>
+  </div>
+</div>
+
+<div id="trackPopup" aria-live="polite">
+  <button id="closeTrackPopup" aria-label="Close music popup">×</button>
+  <img id="popupImg" src="" alt="Current track cover">
+  <div id="popupSongName"><span>Select a track</span></div>
+  <div class="soundwave paused" id="soundwave">
+    <div></div><div></div><div></div><div></div><div></div>
+  </div>
+</div>
+
+<div class="player">
+  <div id="playerSongTitle">Choose a track to start listening</div>
+  <div class="controls-row">
+    <button class="control" id="prevButton" aria-label="Previous track">⏮</button>
+    <button class="control main-control" id="playPauseButton" aria-label="Play or pause">▶</button>
+    <button class="control" id="nextButton" aria-label="Next track">⏭</button>
+  </div>
+  <div class="seek-container" id="seekContainer">
+    <span id="currTimeText">0:00</span>
+    <input type="range" id="seekSlider" min="0" max="100" value="0" aria-label="Seek through track">
+    <span id="durTimeText">0:00</span>
+  </div>
+</div>
+
+<button id="surpriseButton" aria-label="Click here for a surprise" title="Click here for a surprise">
+  <span class="surprise-icon">🎉</span>
+  <span class="surprise-label">Click here for a surprise</span>
+</button>
+
+<div id="surpriseOverlay" role="dialog" aria-modal="true" aria-label="Surprise video">
+  <video id="surpriseVideo" playsinline preload="auto">
+    <source src="hi.mp4" type="video/mp4">
+    Your browser does not support video playback.
+  </video>
+</div>
+
+<audio id="trackAudio" preload="metadata"></audio>
+
+<script>
+const brandTitle = document.getElementById('brandTitle');
+let showAltTitle = false;
+
+setInterval(() => {
+  brandTitle.style.opacity = '0';
+  brandTitle.style.transform = 'scale(.88) rotateX(25deg)';
+
+  setTimeout(() => {
+    showAltTitle = !showAltTitle;
+
+    brandTitle.textContent = showAltTitle
+      ? 'Gawk Gawk Goutham Productions'
+      : 'G³ Productions';
+
+    brandTitle.style.opacity = '1';
+    brandTitle.style.transform = 'scale(1) rotateX(0deg)';
+  }, 350);
+}, 5000);
+
+// Countdown
+const targetDate = new Date(2026, 11, 17, 0, 0, 0).getTime();
+
+function updateCountdown() {
+  const distance = targetDate - Date.now();
+  const el = document.getElementById('countdown');
+
+  if (distance <= 0) {
+    el.textContent = 'THE HITMAN HAS ARRIVED';
+    el.style.fontSize = 'clamp(20px, 5vw, 34px)';
+    document.querySelector('.label-container').style.display = 'none';
+    return;
+  }
+
+  const days = Math.floor(distance / 86400000);
+  const hours = Math.floor((distance % 86400000) / 3600000);
+  const minutes = Math.floor((distance % 3600000) / 60000);
+  const seconds = Math.floor((distance % 60000) / 1000);
+
+  el.textContent =
+    `${days}:${String(hours).padStart(2,'0')}:` +
+    `${String(minutes).padStart(2,'0')}:` +
+    `${String(seconds).padStart(2,'0')}`;
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+const tracks = [
+  { name: 'Ra-Gay', file: 'ragay-original.mp3', cover: 'Ragay.png', color: '#f5b942' },
+  { name: 'Ra-Gay Ultraphonk', file: 'ragay-ultraphonk.mp3', cover: 'rgultra.png', color: '#ff6b35' },
+  { name: 'Naughty Niranjan', file: 'naughty-niranjan.mp3', cover: 'nn.png', color: '#6a5bff' },
+  { name: 'Lavender Poove', file: 'lavender-poove.mp3', cover: 'lp.png', color: '#b84bff' },
+  { name: 'Happy Birthday Megharajan', file: 'happy-birthday-megharajan.mp3', cover: 'hbdmeg.png', color: '#38ffb5' }
+];
+
+let currentIndex = -1;
+
+const audio = document.getElementById('trackAudio');
+const playPauseButton = document.getElementById('playPauseButton');
+const seekSlider = document.getElementById('seekSlider');
+const seekContainer = document.getElementById('seekContainer');
+const trackPopup = document.getElementById('trackPopup');
+const soundwave = document.getElementById('soundwave');
+const modalBackdrop = document.getElementById('modalBackdrop');
+
+function setPlayingUI(isPlaying) {
+  playPauseButton.textContent = isPlaying ? 'Ⅱ' : '▶';
+  document.body.classList.toggle('pulsing', isPlaying);
+  soundwave.classList.toggle('paused', !isPlaying);
+}
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return '0:00';
+  return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2,'0')}`;
+}
+
+function playTrack(index) {
+  if (!tracks.length) return;
+
+  currentIndex = (index + tracks.length) % tracks.length;
+  const track = tracks[currentIndex];
+
+  audio.pause();
+  audio.src = track.file;
+  audio.load();
+
+  document.getElementById('popupImg').src = track.cover;
+
+  const popupName = document.getElementById('popupSongName');
+  popupName.replaceChildren();
+
+  const scrollingName = document.createElement('span');
+  scrollingName.textContent = track.name;
+  popupName.appendChild(scrollingName);
+
+  document.getElementById('playerSongTitle').textContent = track.name;
+  document.documentElement.style.setProperty('--song-color', track.color);
+
+  trackPopup.classList.add('show');
+  seekContainer.style.display = 'flex';
+  seekSlider.value = 0;
+  document.getElementById('currTimeText').textContent = '0:00';
+  document.getElementById('durTimeText').textContent = '0:00';
+
+  audio.play()
+    .then(() => {
+      setPlayingUI(true);
+
+      if (typeof window.recordSongPlay === 'function') {
+        window.recordSongPlay(track.name);
+      }
+    })
+    .catch(() => {
+      setPlayingUI(false);
+      document.getElementById('playerSongTitle').textContent =
+        `${track.name} — check that ${track.file} is beside index.html`;
+    });
+}
+
+document.querySelectorAll('.song-card').forEach(card => {
+  card.addEventListener('click', () => {
+    if (card.dataset.song === 'Hitman Of Girls') {
+      audio.pause();
+      setPlayingUI(false);
+      document.getElementById('modalTitle').textContent = 'Coming soon';
+      document.getElementById('modalMessage').textContent =
+        'Hitman Of Girls is on its way. Stay tuned for the arrival.';
+      modalBackdrop.classList.add('show');
+      return;
+    }
+
+    const index = tracks.findIndex(track => track.name === card.dataset.song);
+    if (index !== -1) playTrack(index);
+  });
+});
+
+playPauseButton.addEventListener('click', () => {
+  if (currentIndex < 0) {
+    playTrack(0);
+    return;
+  }
+
+  if (audio.paused) {
+    audio.play()
+      .then(() => setPlayingUI(true))
+      .catch(() => setPlayingUI(false));
+  } else {
+    audio.pause();
+    setPlayingUI(false);
+  }
+});
+
+document.getElementById('prevButton').addEventListener('click', () => {
+  playTrack(currentIndex <= 0 ? tracks.length - 1 : currentIndex - 1);
+});
+
+document.getElementById('nextButton').addEventListener('click', () => {
+  playTrack(currentIndex < 0 ? 0 : (currentIndex + 1) % tracks.length);
+});
+
+audio.addEventListener('ended', () => {
+  playTrack((currentIndex + 1) % tracks.length);
+});
+
+audio.addEventListener('play', () => setPlayingUI(true));
+audio.addEventListener('pause', () => setPlayingUI(false));
+
+audio.addEventListener('timeupdate', () => {
+  if (Number.isFinite(audio.duration) && audio.duration > 0) {
+    seekSlider.value = (audio.currentTime / audio.duration) * 100;
+    document.getElementById('currTimeText').textContent = formatTime(audio.currentTime);
+    document.getElementById('durTimeText').textContent = formatTime(audio.duration);
+  }
+});
+
+seekSlider.addEventListener('input', () => {
+  if (Number.isFinite(audio.duration) && audio.duration > 0) {
+    audio.currentTime = (Number(seekSlider.value) / 100) * audio.duration;
+  }
+});
+
+document.getElementById('closeTrackPopup').addEventListener('click', () => {
+  trackPopup.classList.remove('show');
+});
+
+document.getElementById('closeModal').addEventListener('click', () => {
+  modalBackdrop.classList.remove('show');
+});
+
+modalBackdrop.addEventListener('click', event => {
+  if (event.target === modalBackdrop) modalBackdrop.classList.remove('show');
+});
+
+// Surprise video: no close button, overlay dismissal, or Escape dismissal.
+const surpriseButton = document.getElementById('surpriseButton');
+const surpriseOverlay = document.getElementById('surpriseOverlay');
+const surpriseVideo = document.getElementById('surpriseVideo');
+
+let surprisePlaying = false;
+let musicWasPlayingBeforeSurprise = false;
+let previousAudioTime = 0;
+
+function finishSurprise() {
+  if (!surprisePlaying) return;
+
+  surprisePlaying = false;
+  surpriseVideo.pause();
+
+  try { surpriseVideo.currentTime = 0; } catch (error) {}
+
+  surpriseOverlay.classList.remove('show');
+  surpriseButton.style.display = 'flex';
+
+  if (musicWasPlayingBeforeSurprise && currentIndex >= 0) {
+    audio.currentTime = previousAudioTime;
+    audio.play()
+      .then(() => setPlayingUI(true))
+      .catch(() => setPlayingUI(false));
+  } else {
+    setPlayingUI(false);
+  }
+
+  musicWasPlayingBeforeSurprise = false;
+}
+
+surpriseButton.addEventListener('click', async () => {
+  if (surprisePlaying) return;
+
+  surprisePlaying = true;
+  surpriseButton.style.display = 'none';
+  surpriseOverlay.classList.add('show');
+
+  musicWasPlayingBeforeSurprise = !audio.paused;
+  previousAudioTime = audio.currentTime;
+
+  audio.pause();
+  setPlayingUI(false);
+
+  try {
+    surpriseVideo.currentTime = 0;
+    await surpriseVideo.play();
+  } catch (error) {
+    finishSurprise();
+    alert('Could not play hi.mp4. Make sure hi.mp4 is in the same folder as index.html.');
+  }
+});
+
+surpriseVideo.addEventListener('ended', finishSurprise);
+
+surpriseVideo.addEventListener('error', () => {
+  if (surprisePlaying) {
+    finishSurprise();
+    alert('Could not load hi.mp4. Check that the video file exists beside index.html.');
+  }
+});
+
+document.addEventListener('keydown', event => {
+  if (surprisePlaying && event.key === 'Escape') {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+}, true);
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  onSnapshot,
+  setDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAy5dcuTfNhkSR75NdaotoCzz3kfhE7sDI",
+  authDomain: "g3-productions.firebaseapp.com",
+  projectId: "g3-productions",
+  storageBucket: "g3-productions.firebasestorage.app",
+  messagingSenderId: "896118274245",
+  appId: "1:896118274245:web:988cf755a69a96506058ac",
+  measurementId: "G-0BT234H44M"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const viewsRef = doc(db, "viewcount", "views");
+
+const trendingSongs = [
+  { name: "Ra-Gay", field: "RG0", cover: "Ragay.png" },
+  { name: "Ra-Gay Ultraphonk", field: "RGultra0", cover: "rgultra.png" },
+  { name: "Naughty Niranjan", field: "NN0", cover: "nn.png" },
+  { name: "Lavender Poove", field: "lavpoo0", cover: "lp.png" },
+  { name: "Happy Birthday Megharajan", field: "hbdmeg0", cover: "hbdmeg.png" },
+  { name: "Hitman Of Girls", field: "hmog0", cover: "hmog.png" }
+];
+
+const trendingList = document.getElementById("trendingList");
+const trendingStatus = document.getElementById("trendingStatus");
+
+function formatViews(value) {
+  return Number(value || 0).toLocaleString("en-IN");
+}
+
+function renderTrending(data) {
+  const rankedSongs = trendingSongs
+    .map(song => ({
+      ...song,
+      views: Number(data[song.field] || 0)
+    }))
+    .sort((a, b) => b.views - a.views || a.name.localeCompare(b.name))
+    .slice(0, 3);
+
+  trendingList.replaceChildren();
+
+  if (rankedSongs.every(song => song.views === 0)) {
+    trendingStatus.textContent = "Be the first to play a track!";
+  } else {
+    trendingStatus.textContent = "Live rankings · Updated automatically";
+  }
+
+  const displayOrder = [
+    rankedSongs[1],
+    rankedSongs[0],
+    rankedSongs[2]
+  ].filter(Boolean);
+
+  displayOrder.forEach(song => {
+    const actualRank = rankedSongs.findIndex(item => item.name === song.name) + 1;
+
+    const item = document.createElement("div");
+    item.className = `trending-card rank-${actualRank}`;
+
+    const medal = document.createElement("div");
+    medal.className = "trending-medal";
+    medal.textContent = actualRank === 1 ? "🥇" : actualRank === 2 ? "🥈" : "🥉";
+
+    const cover = document.createElement("img");
+    cover.className = "trending-cover";
+    cover.src = song.cover;
+    cover.alt = song.name + " cover";
+    cover.loading = "lazy";
+    cover.onerror = () => {
+      cover.style.visibility = "hidden";
+    };
+
+    const rank = document.createElement("div");
+    rank.className = "trending-rank-label";
+    rank.textContent = actualRank === 1 ? "TOP TRACK" : `RANK #${actualRank}`;
+
+    const name = document.createElement("div");
+    name.className = "trending-name";
+    name.textContent = song.name;
+
+    const views = document.createElement("div");
+    views.className = "trending-views";
+    views.textContent = formatViews(song.views);
+
+    const viewsLabel = document.createElement("small");
+    viewsLabel.textContent = song.views === 1 ? "play" : "plays";
+    views.appendChild(viewsLabel);
+
+    item.append(medal, cover, rank, name, views);
+    trendingList.appendChild(item);
+  });
+}
+
+window.recordSongPlay = async function(songName) {
+  const song = trendingSongs.find(item => item.name === songName);
+  if (!song) return;
+
+  try {
+    await setDoc(viewsRef, {
+      [song.field]: increment(1)
+    }, { merge: true });
+  } catch (error) {
+    console.error("Could not update Firebase play count:", error);
+  }
+};
+
+onSnapshot(viewsRef, snapshot => {
+  renderTrending(snapshot.exists() ? snapshot.data() : {});
+}, error => {
+  console.error("Could not read Firebase trending data:", error);
+  trendingStatus.textContent =
+    "Unable to load Firebase trending songs. Check your Firestore security rules.";
+});
+</script>
+</body>
+</html>
