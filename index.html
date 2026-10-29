@@ -786,6 +786,66 @@ button.control.main-control {
   .trending-card { padding-left: 3px; padding-right: 3px; }
   .trending-rank-label { font-size: 8px; letter-spacing: 1px; }
 }
+
+/* External music streaming links */
+#streamingSection {
+  margin: 34px 0 10px;
+  padding: 22px 18px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(245,185,66,.07), rgba(255,107,53,.035));
+}
+.streaming-heading {
+  margin: 0 0 7px;
+  color: var(--accent);
+  font-size: 20px;
+}
+.streaming-subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+.streaming-track {
+  padding: 14px;
+  margin-top: 12px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 15px;
+  background: rgba(255,255,255,.025);
+}
+.streaming-track-name {
+  font-size: 14px;
+  font-weight: 850;
+  margin-bottom: 11px;
+}
+.streaming-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.streaming-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  transition: transform .18s, filter .18s;
+}
+.streaming-link:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.streaming-link.youtube { background: #e62117; }
+.streaming-link.spotify { background: #1db954; color: #071b0d; }
+.streaming-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 420px) {
+  #streamingSection { padding: 17px 12px; }
+  .streaming-link { flex: 1 1 135px; }
+}
+
 </style>
 </head>
 
@@ -871,6 +931,33 @@ button.control.main-control {
     </div>
     <div class="play-mark">✦</div>
   </div>
+
+
+  <section id="streamingSection" aria-labelledby="streamingHeading">
+    <h2 class="streaming-heading" id="streamingHeading">🎧 Music Streaming Platforms</h2>
+    <p class="streaming-subtitle">Listen to these tracks on your preferred platform.</p>
+
+    <div class="streaming-track">
+      <div class="streaming-track-name">Ra Gay Ultrafunk</div>
+      <div class="streaming-links">
+        <a class="streaming-link youtube" href="https://m.youtube.com/watch?v=3YHM-tI40EE&amp;list=RD3YHM-tI40EE&amp;start_radio=1&amp;pp=ygUGUmEgZ2F5oAcB" target="_blank" rel="noopener noreferrer" aria-label="Listen to Ra Gay Ultrafunk on YouTube">
+          <span aria-hidden="true">▶</span> YouTube
+        </a>
+        <a class="streaming-link spotify" href="https://open.spotify.com/track/75BP2uobrpWotymwRlzxw7?si=CzZZDNVNRJuNzVTEFSNgTg&amp;utm_source=copy-link" target="_blank" rel="noopener noreferrer" aria-label="Listen to Ra Gay Ultrafunk on Spotify">
+          <span aria-hidden="true">♫</span> Spotify
+        </a>
+      </div>
+    </div>
+
+    <div class="streaming-track">
+      <div class="streaming-track-name">Hitman of Girls — Cover</div>
+      <div class="streaming-links">
+        <a class="streaming-link spotify" href="https://open.spotify.com/track/1RgTZL0mvE91kV6igSz3i0?si=LCny3vSBQTqdKsPrFWKFjg" target="_blank" rel="noopener noreferrer" aria-label="Listen to Hitman of Girls cover on Spotify">
+          <span aria-hidden="true">♫</span> Spotify
+        </a>
+      </div>
+    </div>
+  </section>
 
   <section id="trendingSection">
     <div class="trending-heading">
